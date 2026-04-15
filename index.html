@@ -3,58 +3,250 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dola's To-Do List</title>
+    <title>TaskFlow - Aplikasi Manajemen Tugas</title>
     <link rel="stylesheet" href="style.css">
-    <!-- Font Awesome untuk icon -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1><i class="fas fa-tasks"></i> To-Do List</h1>
-            <p>Kelola tugasmu dengan lebih terorganisir</p>
-        </header>
-
-        <!-- Input Form -->
-        <div class="input-section">
-            <input type="text" id="taskInput" placeholder="Tambah tugas baru...">
-            <input type="datetime-local" id="deadlineInput">
-            <select id="priorityInput">
-                <option value="low">Prioritas Rendah</option>
-                <option value="medium" selected>Sedang</option>
-                <option value="high">Tinggi</option>
-            </select>
-            <button id="addBtn">Tambah</button>
-        </div>
-
-        <!-- Filter & Sort -->
-        <div class="controls">
-            <div class="filters">
-                <button class="filter-btn active" data-filter="all">Semua</button>
-                <button class="filter-btn" data-filter="pending">Belum</button>
-                <button class="filter-btn" data-filter="completed">Selesai</button>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="logo">
+                <i class="fas fa-check-double"></i>
+                <h1>TaskFlow</h1>
             </div>
-            <div class="sort">
-                <select id="sortSelect">
-                    <option value="default">Urutkan</option>
-                    <option value="priority">Prioritas (Tinggi-Rendah)</option>
-                    <option value="date">Tanggal</option>
-                </select>
+            <div class="header-actions">
+                <button id="notificationBtn" class="btn-icon" title="Aktifkan Notifikasi">
+                    <i class="fas fa-bell"></i>
+                    <span class="notification-badge" id="notificationBadge"></span>
+                </button>
+                <button id="themeToggle" class="btn-icon" title="Toggle Dark Mode">
+                    <i class="fas fa-moon"></i>
+                </button>
             </div>
         </div>
+    </header>
 
-        <!-- Kalender View -->
-        <div class="calendar-section">
-            <div class="calendar-nav">
-                <button id="prevMonth"><i class="fas fa-chevron-left"></i></button>
-                <h3 id="currentMonth"></h3>
-                <button id="nextMonth"><i class="fas fa-chevron-right"></i></button>
-            </div>
-            <div id="calendarGrid"></div>
+    <!-- Main Content -->
+    <main class="main">
+        <div class="container">
+            <!-- Stats Section -->
+            <section class="stats-section">
+                <div class="stat-card">
+                    <div class="stat-icon blue">
+                        <i class="fas fa-tasks"></i>
+                    </div>
+                    <div class="stat-info">
+                        <span class="stat-value" id="totalTasks">0</span>
+                        <span class="stat-label">Total Tugas</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon green">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <div class="stat-info">
+                        <span class="stat-value" id="completedTasks">0</span>
+                        <span class="stat-label">Selesai</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon orange">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <div class="stat-info">
+                        <span class="stat-value" id="pendingTasks">0</span>
+                        <span class="stat-label">Pending</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon red">
+                        <i class="fas fa-exclamation-triangle"></i>
+                    </div>
+                    <div class="stat-info">
+                        <span class="stat-value" id="overdueTasks">0</span>
+                        <span class="stat-label">Terlambat</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Calendar Section -->
+            <section class="calendar-section">
+                <div class="calendar-header">
+                    <button id="prevMonth" class="btn-icon"><i class="fas fa-chevron-left"></i></button>
+                    <h2 id="currentMonthYear"></h2>
+                    <button id="nextMonth" class="btn-icon"><i class="fas fa-chevron-right"></i></button>
+                </div>
+                <div class="calendar-grid" id="calendarGrid">
+                    <!-- Calendar akan di-render oleh JS -->
+                </div>
+                <div class="calendar-legend">
+                    <div class="legend-item">
+                        <span class="legend-dot weekend"></span>
+                        <span>Akhir Pekan</span>
+                    </div>
+                    <div class="legend-item">
+                        <span class="legend-dot holiday"></span>
+                        <span>Libur Nasional</span>
+                    </div>
+                    <div class="legend-item">
+                        <span class="legend-dot has-task"></span>
+                        <span>Ada Tugas</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Task Form -->
+            <section class="task-form-section">
+                <div class="form-card">
+                    <h3><i class="fas fa-plus-circle"></i> Tambah Tugas Baru</h3>
+                    <form id="taskForm">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="taskTitle">Judul Tugas</label>
+                                <input type="text" id="taskTitle" placeholder="Masukkan judul tugas..." required>
+                            </div>
+                            <div class="form-group">
+                                <label for="taskPriority">Prioritas</label>
+                                <select id="taskPriority">
+                                    <option value="low">Low</option>
+                                    <option value="medium" selected>Medium</option>
+                                    <option value="high">High</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="taskDeadline">Deadline</label>
+                                <input type="datetime-local" id="taskDeadline" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="taskCategory">Kategori</label>
+                                <select id="taskCategory">
+                                    <option value="work">Pekerjaan</option>
+                                    <option value="personal">Pribadi</option>
+                                    <option value="study">Belajar</option>
+                                    <option value="other">Lainnya</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Subtasks (Opsional)</label>
+                            <div id="subtaskContainer">
+                                <div class="subtask-input-group">
+                                    <input type="text" class="subtask-input" placeholder="Subtask 1">
+                                    <button type="button" class="btn-remove-subtask"><i class="fas fa-times"></i></button>
+                                </div>
+                            </div>
+                            <button type="button" id="addSubtaskBtn" class="btn-add-subtask">
+                                <i class="fas fa-plus"></i> Tambah Subtask
+                            </button>
+                        </div>
+                        <button type="submit" class="btn-primary">
+                            <i class="fas fa-save"></i> Simpan Tugas
+                        </button>
+                    </form>
+                </div>
+            </section>
+
+            <!-- Filters -->
+            <section class="filters-section">
+                <div class="filter-group">
+                    <label>Filter:</label>
+                    <button class="filter-btn active" data-filter="all">Semua</button>
+                    <button class="filter-btn" data-filter="pending">Belum Selesai</button>
+                    <button class="filter-btn" data-filter="completed">Selesai</button>
+                </div>
+                <div class="filter-group">
+                    <label>Prioritas:</label>
+                    <button class="filter-btn active" data-priority="all">Semua</button>
+                    <button class="filter-btn" data-priority="high">High</button>
+                    <button class="filter-btn" data-priority="medium">Medium</button>
+                    <button class="filter-btn" data-priority="low">Low</button>
+                </div>
+                <div class="filter-group">
+                    <button id="sortBtn" class="btn-secondary">
+                        <i class="fas fa-sort"></i> Urutkan Prioritas
+                    </button>
+                </div>
+            </section>
+
+            <!-- Tasks List -->
+            <section class="tasks-section">
+                <h3><i class="fas fa-list"></i> Daftar Tugas</h3>
+                <div id="tasksContainer" class="tasks-container">
+                    <!-- Tasks akan di-render oleh JS -->
+                </div>
+                <div id="emptyState" class="empty-state" style="display: none;">
+                    <i class="fas fa-clipboard-list"></i>
+                    <p>Belum ada tugas. Tambahkan tugas pertama Anda!</p>
+                </div>
+            </section>
         </div>
+    </main>
 
-        <!-- Daftar Tugas -->
-        <div id="taskList" class="task-list"></div>
+    <!-- Edit Modal -->
+    <div id="editModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Edit Tugas</h3>
+                <button class="btn-close" id="closeEditModal"><i class="fas fa-times"></i></button>
+            </div>
+            <form id="editForm">
+                <input type="hidden" id="editTaskId">
+                <div class="form-group">
+                    <label for="editTaskTitle">Judul Tugas</label>
+                    <input type="text" id="editTaskTitle" required>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="editTaskPriority">Prioritas</label>
+                        <select id="editTaskPriority">
+                            <option value="low">Low</option>
+                            <option value="medium">Medium</option>
+                            <option value="high">High</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="editTaskDeadline">Deadline</label>
+                        <input type="datetime-local" id="editTaskDeadline" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Subtasks</label>
+                    <div id="editSubtaskContainer"></div>
+                    <button type="button" id="editAddSubtaskBtn" class="btn-add-subtask">
+                        <i class="fas fa-plus"></i> Tambah Subtask
+                    </button>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn-secondary" id="cancelEdit">Batal</button>
+                    <button type="submit" class="btn-primary">Simpan Perubahan</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Day Tasks Modal -->
+    <div id="dayTasksModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="dayTasksTitle">Tugas Hari Ini</h3>
+                <button class="btn-close" id="closeDayTasksModal"><i class="fas fa-times"></i></button>
+            </div>
+            <div id="dayTasksList" class="day-tasks-list">
+                <!-- Tasks untuk hari tertentu -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast">
+        <div class="toast-content">
+            <i class="fas fa-info-circle"></i>
+            <span id="toastMessage"></span>
+        </div>
     </div>
 
     <script src="script.js"></script>
