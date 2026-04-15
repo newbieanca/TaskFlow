@@ -1,0 +1,296 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    padding: 20px;
+}
+
+.container {
+    max-width: 900px;
+    margin: 0 auto;
+    background: white;
+    border-radius: 20px;
+    padding: 30px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+}
+
+header {
+    text-align: center;
+    margin-bottom: 30px;
+    color: #333;
+}
+
+/* Input Section */
+.input-section {
+    display: grid;
+    grid-template-columns: 2fr 1.5fr 1fr auto;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+input, select, button {
+    padding: 12px 15px;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 14px;
+    transition: all 0.3s;
+}
+
+input:focus, select:focus {
+    outline: none;
+    border-color: #667eea;
+}
+
+#addBtn {
+    background: #667eea;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+}
+#addBtn:hover {
+    background: #5568d3;
+    transform: translateY(-2px);
+}
+
+/* Controls */
+.controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 20px 0;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.filters button {
+    margin-right: 5px;
+    background: #f0f0f0;
+    border: none;
+    cursor: pointer;
+}
+.filters button.active {
+    background: #667eea;
+    color: white;
+}
+
+/* Kalender */
+.calendar-section {
+    background: #f8f9fa;
+    padding: 15px;
+    border-radius: 12px;
+    margin-bottom: 25px;
+}
+
+.calendar-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.calendar-nav button {
+    padding: 5px 10px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+}
+
+#calendarGrid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 5px;
+    text-align: center;
+}
+
+.cal-day-name {
+    font-weight: bold;
+    color: #666;
+    padding: 8px;
+    font-size: 12px;
+}
+
+.cal-date {
+    padding: 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    position: relative;
+    font-size: 14px;
+    border: 1px solid #eee;
+}
+.cal-date:hover {
+    background: #e9ecef;
+}
+.cal-date.weekend {
+    background: #fff3cd;
+    color: #856404;
+}
+.cal-date.holiday {
+    background: #f8d7da;
+    color: #721c24;
+    font-weight: bold;
+}
+.cal-date.has-task::after {
+    content: '';
+    position: absolute;
+    bottom: 4px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 5px;
+    height: 5px;
+    background: #667eea;
+    border-radius: 50%;
+}
+.cal-date.selected {
+    background: #667eea;
+    color: white;
+}
+
+/* Task Card */
+.task-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.task-card {
+    background: white;
+    border: 1px solid #e0e0e0;
+    border-radius: 12px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    animation: slideIn 0.3s ease;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+@keyframes slideIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.task-card.deleting {
+    animation: slideOut 0.3s ease forwards;
+}
+@keyframes slideOut {
+    to { opacity: 0; transform: translateX(100px); height: 0; padding: 0; margin: 0; }
+}
+
+.task-header {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.task-checkbox {
+    width: 22px;
+    height: 22px;
+    cursor: pointer;
+}
+
+.task-content {
+    flex: 1;
+}
+
+.task-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: #333;
+}
+.task-title.completed {
+    text-decoration: line-through;
+    color: #aaa;
+}
+
+/* Prioritas & Deadline */
+.badge {
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: bold;
+    color: white;
+}
+.badge.low { background: #28a745; }
+.badge.medium { background: #ffc107; color: #333;}
+.badge.high { background: #dc3545; }
+
+.deadline {
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+.deadline.soon { color: #ffc107; font-weight: bold; }
+.deadline.over { color: #dc3545; font-weight: bold; }
+
+/* Progress Bar */
+.progress-section {
+    margin-top: 8px;
+}
+.progress-bar {
+    width: 100%;
+    height: 8px;
+    background: #e0e0e0;
+    border-radius: 4px;
+    overflow: hidden;
+}
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #28a745, #667eea);
+    width: 0%;
+    transition: width 0.5s;
+}
+
+/* Subtasks */
+.subtasks {
+    margin-top: 10px;
+    padding-left: 35px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.subtask-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;
+}
+
+.subtask-input {
+    flex: 1;
+    padding: 6px;
+    border: 1px dashed #ccc;
+}
+
+.task-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.task-actions button {
+    padding: 6px 12px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+}
+.edit-btn { background: #ffc107; }
+.delete-btn { background: #dc3545; color: white; }
+
+/* Responsive */
+@media (max-width: 768px) {
+    .input-section {
+        grid-template-columns: 1fr;
+    }
+    .container {
+        padding: 15px;
+    }
+}
